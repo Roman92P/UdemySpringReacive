@@ -3,6 +3,7 @@ package com.learnreactiveprogramming.service;
 import lombok.var;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.List;
@@ -37,10 +38,30 @@ public class FluxAndMonoGeneratorService {
 
     private Flux<String> splitString_withDelay(String s) {
         var split = s.split("");
-        var delay = new Random().nextInt(1000);
+//        var delay = new Random().nextInt(1000);
+        var delay = 1000;
         return Flux.fromArray(split)
                 .delayElements(Duration.ofMillis(delay));
 
+    }
+
+    public Mono<String> namesMono_map_filter(int stringLength) {
+        return Mono.just("alex")
+                .map(String::toUpperCase)
+                .filter(s -> s.length() > stringLength);
+    }
+
+    public Mono<List<String>> namesMono_flatMap(int stringLength) {
+        return Mono.just("alex")
+                .map(String::toUpperCase)
+                .filter(s -> s.length() > stringLength)
+                .flatMap(this::splitStringMono);
+    }
+
+    private Mono<List<String>> splitStringMono(String s) {
+        var split = s.split("");
+        var split1 = List.of(split);
+        return Mono.just(split1);
     }
 
     public static void main(String[] args) {
