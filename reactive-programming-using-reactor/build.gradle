@@ -4,6 +4,7 @@ plugins {
 
 }
 
+
 group 'com.learnreaactiveprogramming'
 version '1.0-SNAPSHOT'
 
@@ -31,3 +32,5 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+sourceCompatibility = JavaVersion.VERSION_1_9
+targetCompatibility = JavaVersion.VERSION_1_9
