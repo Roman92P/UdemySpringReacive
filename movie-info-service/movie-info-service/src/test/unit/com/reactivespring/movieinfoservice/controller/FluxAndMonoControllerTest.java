@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.List;
@@ -44,7 +45,7 @@ class FluxAndMonoControllerTest {
                 .getResponseBody();
 
         StepVerifier.create(responseBody)
-                .expectNext(1,2,3)
+                .expectNext(1, 2, 3)
                 .verifyComplete();
     }
 
@@ -63,5 +64,38 @@ class FluxAndMonoControllerTest {
                     assert Objects.requireNonNull(responseBody1).size() == 3;
                 });
 
+    }
+
+    @Test
+    void mono() {
+
+        webTestClient.get()
+                .uri("/mono")
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBody(String.class)
+                .consumeWith(stringEntityExchangeResult -> {
+                    var responseBody1 = stringEntityExchangeResult.getResponseBody();
+                    assertEquals("hello-world", responseBody1);
+                });
+
+    }
+
+    @Test
+    void stream() {
+
+        Flux<Long> responseBody = webTestClient.get()
+                .uri("/stream")
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .returnResult(Long.class)
+                .getResponseBody();
+
+        StepVerifier.create(responseBody)
+                .expectNext(0L,1L, 2L, 3L)
+                .thenCancel()
+                .verify();
     }
 }
