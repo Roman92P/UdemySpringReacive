@@ -1,13 +1,10 @@
 package com.learnreactiveprogramming.service;
 
-import lombok.var;
-import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Function;
 
 
@@ -95,7 +92,8 @@ public class FluxAndMonoGeneratorService {
 
 
     public Flux<String> namesFlux_transform(int stringLength) {
-        Function<Flux<String>, Flux<String>> filterMap = name -> name.map(String::toUpperCase);
+        var filterMap = (Function<Flux<String>, Flux<String>>) name -> name.map(String::toUpperCase)
+                .filter(s -> s.length() > stringLength);
         return Flux.fromIterable(List.of("alex", "ben", "chloe"))
                 .transform(filterMap)
                 .flatMap(this::splitString_withDelay)
