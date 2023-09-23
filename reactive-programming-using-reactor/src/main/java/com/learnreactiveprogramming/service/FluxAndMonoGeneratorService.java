@@ -99,4 +99,10 @@ public class FluxAndMonoGeneratorService {
                 .flatMap(this::splitString_withDelay)
                 .log();
     }
+
+    public Flux<String> explore_zip() {
+        var abcFlux = Flux.just("A","B","C");
+        var defFlux = Flux.just("D","E","F");
+        return Flux.zip(abcFlux, defFlux, (first, second) -> first + second);
+    }
 }
