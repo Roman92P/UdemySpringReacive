@@ -1,0 +1,5 @@
+Two approaches in Spring WebFlux:
+1.Annitated Contorllers
+2.Functional Endpoints
+
+It is very common to split business functionalities between MicroServices
