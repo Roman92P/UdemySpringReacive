@@ -3,3 +3,14 @@ Two approaches in Spring WebFlux:
 2.Functional Endpoints
 
 It is very common to split business functionalities between MicroServices
+
+Streaming Endpoint
+
+continuously sends updates to the clients as the new data arrives
+
+SSE - Server Sent Events
+
+Automated tests:
+
+1. Integration - testing app end-to-end, covering all the layers of our app
+2. Unit - tests only class and method of interest

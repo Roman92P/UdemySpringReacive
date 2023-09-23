@@ -35,3 +35,10 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+//just to differentiate unit and integration tests
+sourceSets {
+	test{
+		java.srcDirs = ['src/test/unit', 'src/test/intg']
+	}
+}
