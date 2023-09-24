@@ -1,7 +1,11 @@
 package com.reactivespring.client;
 
 import com.reactivespring.domain.MovieInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -11,13 +15,20 @@ import reactor.core.publisher.Mono;
 @Component
 public class MoviesInfoRestClient {
 
-    private final WebClient webClient;
+    @Autowired
+    WebClient webClient;
 
-    public MoviesInfoRestClient(WebClient webClient) {
-        this.webClient = webClient;
-    }
+    @Value("${restClient.moviesInfoUrl}")
+    private String moviesInfoUrl;
 
-    public Mono<MovieInfo> retrieveMovieInfo(String movieId) {
-        return null;
+    @GetMapping("/{id}")
+    public Mono<MovieInfo> retrieveMovieInfos(@PathVariable String id) {
+        var ulr = moviesInfoUrl.concat("/{id}");
+        return webClient
+                .get()
+                .uri(ulr, id)
+                .retrieve()
+                .bodyToMono(MovieInfo.class)
+                .log();
     }
 }
