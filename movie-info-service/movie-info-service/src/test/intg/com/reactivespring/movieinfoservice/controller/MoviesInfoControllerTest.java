@@ -15,6 +15,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -99,6 +100,29 @@ class MoviesInfoControllerTest {
                 .consumeWith(movieInfoEntityExchangeResult -> {
                     MovieInfo responseBody = movieInfoEntityExchangeResult.getResponseBody();
                     assertNotNull(responseBody);
+                });
+        //then
+    }
+
+    @Test
+    void updateMovieInfo() {
+        //given
+        MovieInfo movieInfo = new MovieInfo(null, "Batman Begins1",
+                2005, List.of("Christian Bale", "Michael Kane"), LocalDate.parse("2005-06-15"));
+        var id = "abc";
+        //when
+        webTestClient
+                .put()
+                .uri(uri + "/{id}", id)
+                .bodyValue(movieInfo)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBody(MovieInfo.class)
+                .consumeWith(movieInfoEntityExchangeResult -> {
+                    var responseBody = movieInfoEntityExchangeResult.getResponseBody();
+                    assertNotNull(responseBody.getMovieInfoId());
+                    assertEquals("Batman Begins1", responseBody.getName());
                 });
         //then
     }
