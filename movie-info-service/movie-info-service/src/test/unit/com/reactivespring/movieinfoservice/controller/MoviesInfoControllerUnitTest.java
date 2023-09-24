@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -153,5 +154,19 @@ class MoviesInfoControllerUnitTest {
 
     @Test
     void deleteInfo() {
+        //given
+        var id = "abc";
+
+        //when
+        when(movieInfoServiceMock.deleteInfo(isA(String.class))).thenReturn(Mono.empty());
+
+        //then
+        webTestClient
+                .delete()
+                .uri(uri + "/{id}", id)
+                .exchange()
+                .expectStatus()
+                .isNoContent()
+                .expectBody(Void.class);
     }
 }
