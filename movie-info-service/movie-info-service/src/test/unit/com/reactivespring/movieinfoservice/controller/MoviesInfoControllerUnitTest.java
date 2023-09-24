@@ -112,7 +112,7 @@ class MoviesInfoControllerUnitTest {
         //then
         webTestClient
                 .get()
-                .uri(uri+"/{id}", "abc")
+                .uri(uri + "/{id}", "abc")
                 .exchange()
                 .expectStatus()
                 .is2xxSuccessful()
@@ -134,7 +134,7 @@ class MoviesInfoControllerUnitTest {
         when(movieInfoServiceMock.updateInfo(isA(MovieInfo.class), any())).thenReturn(
                 Mono.just(new MovieInfo("test", "Batman Begins1",
                         2005, List.of("Christian Bale", "Michael Kane"), LocalDate.parse("2005-06-15"))
-        ));
+                ));
         //then
         webTestClient
                 .put()
@@ -193,11 +193,5 @@ class MoviesInfoControllerUnitTest {
                     var expectedError = "Cast must be present,Name must be present,Year must be a Positive value";
                     assertEquals(expectedError, responseBody);
                 });
-//                .expectBody(MovieInfo.class)
-//                .consumeWith(movieInfoEntityExchangeResult -> {
-//                    var responseBody = movieInfoEntityExchangeResult.getResponseBody();
-//                    assertNotNull(responseBody.getMovieInfoId());
-//                    assertEquals("mockId", responseBody.getMovieInfoId());
-//                });
     }
 }
