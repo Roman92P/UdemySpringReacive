@@ -38,6 +38,23 @@ public class ReviewsUnitTest {
     static String uri = "/v1/review";
 
     @Test
+    public void addReviewTest_validation() {
+        //given
+        var awesome_movie = new Review(null, null, "Awesome Movie", -9.0);
+
+        //when
+        when(reviewReactiveRepository.save(isA(Review.class))).thenReturn(Mono.just(awesome_movie));
+
+        //then
+        webTestClient
+                .post()
+                .uri(uri)
+                .bodyValue(awesome_movie)
+                .exchange()
+                .expectStatus()
+                .isBadRequest();
+    }
+    @Test
     public void addReviewTest() {
         //given
         var awesome_movie = new Review(null, 1L, "Awesome Movie", 9.0);

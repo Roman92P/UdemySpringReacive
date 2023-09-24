@@ -1,7 +1,10 @@
 package com.reactivespring.handler;
 
 import com.reactivespring.domain.Review;
+import com.reactivespring.exception.ReviewDataException;
 import com.reactivespring.repository.ReviewReactiveRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -9,14 +12,21 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Roman Pashkov created on 24.09.2023 inside the package - com.reactivespring.handler
  */
 @Component
+@Slf4j
 public class ReviewHandler {
 
+    @Autowired
+    private Validator validator;
     private final ReviewReactiveRepository repository;
 
     public ReviewHandler(ReviewReactiveRepository repository) {
@@ -26,15 +36,28 @@ public class ReviewHandler {
     public Mono<ServerResponse> addReview(ServerRequest request) {
         return
                 request.bodyToMono(Review.class)
+                        .doOnNext(this::validate)
                         .flatMap(repository::save)
                         .flatMap(savedReview -> ServerResponse.status(HttpStatus.CREATED).bodyValue(savedReview));
+    }
+
+    private void validate(Review review) {
+        var vialations = validator.validate(review);
+        log.info("ConstraintViolations: {}", vialations);
+        if (!vialations.isEmpty()) {
+            var errorMessage = vialations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .sorted()
+                    .collect(Collectors.joining(","));
+            throw new ReviewDataException(errorMessage);
+        }
     }
 
     public Mono<ServerResponse> getReviews(ServerRequest request) {
 
         Optional<String> movieInfoId = request.queryParam("movieInfoId");
 
-        if(movieInfoId.isPresent()) {
+        if (movieInfoId.isPresent()) {
             Flux<Review> flux = repository.findReviewsByMovieInfoId(Long.valueOf(movieInfoId.get()));
             return ServerResponse.ok().body(flux, Review.class);
         } else {
