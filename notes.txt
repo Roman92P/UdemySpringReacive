@@ -14,3 +14,9 @@ Automated tests:
 
 1. Integration - testing app end-to-end, covering all the layers of our app
 2. Unit - tests only class and method of interest
+
+
+Web client:
+
+- non-blocking, thread never blocked
+- retrieve() or exchange() functions to make a call
