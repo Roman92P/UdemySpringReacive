@@ -174,4 +174,18 @@ class MoviesInfoControllerTest {
                 .isNotFound();
         //then
     }
+
+    @Test
+    void getMoviesInfoByIdTest_notFound() {
+        //given
+        var id = "abdc";
+        //when
+        webTestClient
+                .get()
+                .uri(uri + "/{id}", id)
+                .exchange()
+                .expectStatus()
+                .isNotFound();
+        //then
+    }
 }
