@@ -2,6 +2,7 @@ package com.reactivespring.handler;
 
 import com.reactivespring.domain.Review;
 import com.reactivespring.exception.ReviewDataException;
+import com.reactivespring.exception.ReviewNotFoundException;
 import com.reactivespring.repository.ReviewReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,8 @@ public class ReviewHandler {
     public Mono<ServerResponse> updateReview(ServerRequest request) {
         String id = request.pathVariable("id");
         Mono<Review> byId = repository.findById(id);
+        //approach with msg in 404 scenario
+                //.switchIfEmpty(Mono.error(new ReviewNotFoundException("Review not found for id " + id)));
 
         return
                 byId.flatMap(review -> request.bodyToMono(Review.class)
@@ -78,7 +81,9 @@ public class ReviewHandler {
                             return review;
                         })
                         .flatMap(repository::save)
-                        .flatMap(savedReview -> ServerResponse.ok().bodyValue(savedReview)));
+                        .flatMap(savedReview -> ServerResponse.ok().bodyValue(savedReview)))
+                        //no message approach to 404 not found
+                        .switchIfEmpty(ServerResponse.notFound().build());
     }
 
     public Mono<ServerResponse> deleteReview(ServerRequest request) {
