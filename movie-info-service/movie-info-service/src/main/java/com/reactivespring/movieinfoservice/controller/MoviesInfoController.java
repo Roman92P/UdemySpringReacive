@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
+
 /**
  * Roman Pashkov created on 24.09.2023 inside the package - com.reactivespring.movieinfoservice.controller
  */
@@ -29,7 +31,7 @@ public class MoviesInfoController {
 
     @PostMapping("/movieInfos")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<MovieInfo> addMovieInfo(@RequestBody MovieInfo movieInfo) {
+    public Mono<MovieInfo> addMovieInfo(@RequestBody @Valid MovieInfo movieInfo) {
         return movieInfoService.addMovie(movieInfo);
     }
 
