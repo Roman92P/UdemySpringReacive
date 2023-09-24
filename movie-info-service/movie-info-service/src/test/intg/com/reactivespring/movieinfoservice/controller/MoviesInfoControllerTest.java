@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -31,6 +33,7 @@ class MoviesInfoControllerTest {
     WebTestClient webTestClient;
 
     static String uri = "/v1/movieInfos";
+
     @BeforeEach
     void setUp() {
         var moviesInfos = List.of(new MovieInfo("abc", "Batman Begins",
@@ -125,5 +128,33 @@ class MoviesInfoControllerTest {
                     assertEquals("Batman Begins1", responseBody.getName());
                 });
         //then
+    }
+
+    @Test
+    void deleteInfo() {
+
+        //given
+        var id = "abc";
+
+        //when
+        webTestClient
+                .delete()
+                .uri(uri + "/{id}", id)
+                .exchange()
+                .expectStatus()
+                .isNoContent()
+                .expectBody(Void.class);
+
+        //then
+        webTestClient
+                .get()
+                .uri(uri + "/{id}", id)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBody(MovieInfo.class)
+                .consumeWith(movieInfoEntityExchangeResult -> {
+                    assertThat(movieInfoEntityExchangeResult == null);
+                });
     }
 }
