@@ -2,17 +2,17 @@ package com.reactivespring.movieinfoservice.controller;
 
 import com.reactivespring.movieinfoservice.domain.MovieInfo;
 import com.reactivespring.movieinfoservice.repository.MovieInfoRepository;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -188,4 +188,24 @@ class MoviesInfoControllerTest {
                 .isNotFound();
         //then
     }
+
+    @Test
+    void getAllMoviesInfo_Year() {
+        //given
+        URI uri1 = UriComponentsBuilder.fromUriString(uri)
+                .queryParam("year", 2005)
+                .buildAndExpand()
+                .toUri();
+        //when
+        webTestClient
+                .get()
+                .uri(uri1)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBodyList(MovieInfo.class)
+                .hasSize(1);
+        //then
+    }
+
 }

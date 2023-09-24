@@ -125,4 +125,32 @@ class MovieInfoRepositoryTest {
                 .verifyComplete();
     }
 
+    @Test
+    void findByYear() {
+
+        //given
+
+        //when
+        var allMovies = movieInfoRepository.findByYear(2005).log();
+
+        //then
+        StepVerifier.create(allMovies)
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
+    void findByName() {
+
+        //given
+
+        //when
+        var allMovies = movieInfoRepository.findByName("Dark Knight Rises").log();
+
+        //then
+        StepVerifier.create(allMovies)
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
 }
