@@ -175,7 +175,7 @@ class MoviesInfoControllerUnitTest {
 
         //given
         MovieInfo movieInfo = new MovieInfo("abcd", "",
-                -2005, List.of("Christian Bale", "Michael Kane"), LocalDate.parse("2005-06-15"));
+                -2005, List.of(""), LocalDate.parse("2005-06-15"));
         //when
 
         //then
@@ -189,8 +189,9 @@ class MoviesInfoControllerUnitTest {
                 .expectBody(String.class)
                 .consumeWith(stringEntityExchangeResult -> {
                     String responseBody = stringEntityExchangeResult.getResponseBody();
-                    System.out.println(responseBody);
                     assertNotNull(responseBody);
+                    var expectedError = "Cast must be present,Name must be present,Year must be a Positive value";
+                    assertEquals(expectedError, responseBody);
                 });
 //                .expectBody(MovieInfo.class)
 //                .consumeWith(movieInfoEntityExchangeResult -> {
