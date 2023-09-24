@@ -20,3 +20,11 @@ Web client:
 
 - non-blocking, thread never blocked
 - retrieve() or exchange() functions to make a call
+
+Possible failures:
+
+Http:
+
+-4xx Client Error
+-5xx Server Error
+-

@@ -52,7 +52,8 @@ public class MoviesInfoController {
 
         return  movieInfoService.getMovieById(id)
                 .map(ResponseEntity::ok)
-                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()))
+                .log();
     }
 
     @PutMapping("/movieInfos/{id}")
