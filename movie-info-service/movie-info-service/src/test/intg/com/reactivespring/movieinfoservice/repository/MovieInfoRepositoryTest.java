@@ -35,7 +35,7 @@ class MovieInfoRepositoryTest {
                         2012, List.of("Christian Bale", "Tom Hardy"), LocalDate.parse("2012-07-20"))
                 );
 
-        //blocking calls are only available in test cases, beacouse you are blocking the thread
+        //blocking calls are only available in test cases, because you are blocking the thread
         movieInfoRepository.saveAll(moviesInfos).blockLast();
     }
 
