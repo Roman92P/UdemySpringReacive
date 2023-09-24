@@ -3,6 +3,7 @@ package com.reactivespring.movieinfoservice.service;
 import com.reactivespring.movieinfoservice.domain.MovieInfo;
 import com.reactivespring.movieinfoservice.repository.MovieInfoRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -21,5 +22,13 @@ public class MovieInfoService {
     public Mono<MovieInfo> addMovie(MovieInfo movieInfo) {
 
         return movieInfoRepository.save(movieInfo);
+    }
+
+    public Flux<MovieInfo> getAllMovies() {
+        return movieInfoRepository.findAll();
+    }
+
+    public Mono<MovieInfo> getMovieById(String id) {
+        return movieInfoRepository.findById(id);
     }
 }

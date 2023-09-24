@@ -4,6 +4,7 @@ import com.reactivespring.movieinfoservice.domain.MovieInfo;
 import com.reactivespring.movieinfoservice.service.MovieInfoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -29,5 +30,15 @@ public class MoviesInfoController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<MovieInfo> addMovieInfo(@RequestBody MovieInfo movieInfo) {
         return movieInfoService.addMovie(movieInfo);
+    }
+
+    @GetMapping("/movieInfos")
+    public Flux<MovieInfo> getAllMovies() {
+        return  movieInfoService.getAllMovies();
+    }
+
+    @GetMapping("/movieInfos/{id}")
+    public Mono<MovieInfo> getMovieById(@PathVariable String id) {
+        return  movieInfoService.getMovieById(id);
     }
 }

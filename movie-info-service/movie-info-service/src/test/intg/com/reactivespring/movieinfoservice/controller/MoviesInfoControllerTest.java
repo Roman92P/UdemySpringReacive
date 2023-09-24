@@ -68,4 +68,38 @@ class MoviesInfoControllerTest {
                 });
         //then
     }
+
+    @Test
+    void getAllMoviesInfo() {
+        //given
+        //when
+        webTestClient
+                .get()
+                .uri(uri)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBodyList(MovieInfo.class)
+                .hasSize(3);
+        //then
+    }
+
+    @Test
+    void getMoviesInfoByIdTest() {
+        //given
+        var id = "abc";
+        //when
+        webTestClient
+                .get()
+                .uri(uri + "/{id}", id)
+                .exchange()
+                .expectStatus()
+                .is2xxSuccessful()
+                .expectBody(MovieInfo.class)
+                .consumeWith(movieInfoEntityExchangeResult -> {
+                    MovieInfo responseBody = movieInfoEntityExchangeResult.getResponseBody();
+                    assertNotNull(responseBody);
+                });
+        //then
+    }
 }
