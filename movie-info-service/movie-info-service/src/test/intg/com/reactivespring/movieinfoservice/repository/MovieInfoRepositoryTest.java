@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.ActiveProfiles;
+import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
@@ -106,6 +107,21 @@ class MovieInfoRepositoryTest {
                     assertNotNull(movieInfo1.getMovieInfoId());
                     assertEquals("Batman Begins", movieInfo1.getName());
                 })
+                .verifyComplete();
+    }
+
+    @Test
+    void deleteTest() {
+
+        //given
+
+        //when
+        var movieInfoFlux = movieInfoRepository.deleteById("abc").block();
+        var allMovies = movieInfoRepository.findAll().log();
+
+        //then
+        StepVerifier.create(allMovies)
+                .expectNextCount(2)
                 .verifyComplete();
     }
 
