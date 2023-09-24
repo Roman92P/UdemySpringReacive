@@ -3,6 +3,7 @@ package com.reactivespring.movieinfoservice.controller;
 import com.reactivespring.movieinfoservice.domain.MovieInfo;
 import com.reactivespring.movieinfoservice.service.MovieInfoService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -37,7 +38,7 @@ public class MoviesInfoController {
         return  movieInfoService.getAllMovies();
     }
 
-    @GetMapping("/movieInfos/{id}")
+    @GetMapping(value = "/movieInfos/{id}", produces = "application/json")
     public Mono<MovieInfo> getMovieById(@PathVariable String id) {
         return  movieInfoService.getMovieById(id);
     }
