@@ -177,10 +177,7 @@ class MoviesInfoControllerUnitTest {
         MovieInfo movieInfo = new MovieInfo("abcd", "",
                 -2005, List.of("Christian Bale", "Michael Kane"), LocalDate.parse("2005-06-15"));
         //when
-        when(movieInfoServiceMock.addMovie(isA(MovieInfo.class))).thenReturn(Mono.just(
-                new MovieInfo("mockId", "Batman Begins1",
-                        2005, List.of("Christian Bale", "Michael Kane"), LocalDate.parse("2005-06-15"))
-        ));
+
         //then
         webTestClient
                 .post()
